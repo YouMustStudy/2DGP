@@ -5,6 +5,8 @@ open_canvas()
 grass = load_image('grass.png')
 character = load_image('character.png')
 
+move_count=10
+
 def move_rotation():
     Position=[(203, 535), (132, 243), (535, 470), (477, 203), (715, 136), (316, 225), (510, 92), (692, 518), (682, 336), (712, 349)]
     for num in range(0, 10):
@@ -15,8 +17,8 @@ def move_rotation():
         else:
             x1,y1=Position[num]
             x2,y2=Position[0]
-        dx,dy=(x2-x1)/5,(y2-y1)/5
-        for count in range(0, 5):
+        dx,dy=(x2-x1)/move_count,(y2-y1)/move_count
+        for count in range(0, move_count):
             clear_canvas_now()
             grass.draw_now(400, 30)
             character.draw_now(x, y)
