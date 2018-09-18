@@ -11,6 +11,7 @@ def move_rotation():
     frame=0
     Direction=1
     Position=[(203, 535), (132, 243), (535, 470), (477, 203), (715, 136), (316, 225), (510, 92), (692, 518), (682, 336), (712, 349)]
+
     for num in range(0, 10):
         x,y=Position[num]
         if(num != 10-1):
