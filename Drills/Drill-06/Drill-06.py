@@ -9,6 +9,9 @@ def GetDxDy(a, b)
     dx,dy=(a-x)/5,(b-y)/5
     count=5
 
+def Move_Character()
+    pass
+
 def handle_events():
     global running
     global px,py
@@ -43,7 +46,7 @@ while running:
     pointer.draw(px+25,py-25)
     update_canvas()
     frame = (frame + 1) % 8
-
+    Move_Character()
     delay(0.02)
     handle_events()
 
