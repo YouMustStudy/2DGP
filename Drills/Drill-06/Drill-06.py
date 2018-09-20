@@ -2,15 +2,26 @@ from pico2d import *
 
 KPU_WIDTH, KPU_HEIGHT = 1280, 1024
 
-def GetDxDy(a, b)
+def GetDxDy(a,b):
     global x,y
     global dx,dy
     global count
+    global direction
     dx,dy=(a-x)/5,(b-y)/5
+    if(dx>0):
+        direction = 1
+    else:
+        direction = 0
     count=5
 
-def Move_Character()
-    pass
+def Move_Character():
+    global x,y
+    global dx,dy
+    global count
+    if(count>0):
+        x+=dx
+        y+=dy
+    count-=1
 
 def handle_events():
     global running
@@ -24,7 +35,7 @@ def handle_events():
             px,py=event.x,KPU_HEIGHT-event.y-1
         elif event.type == SDL_MOUSEBUTTONDOWN:
             if event.button == SDL_BUTTON_LEFT:
-                GetDxDy(event.x, event.y)
+                GetDxDy(event.x, KPU_HEIGHT-1-event.y)
 
 open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
@@ -36,13 +47,14 @@ px, py = 0, 0
 x,y=KPU_WIDTH // 2, KPU_HEIGHT // 2
 dx,dy=0, 0
 count=5
+direction = 0
 frame = 0
 hide_cursor()
 
 while running:
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-    character.clip_draw(frame * 100, 100, 100, 100, x, y)
+    character.clip_draw(frame * 100, direction*100, 100, 100, x, y)
     pointer.draw(px+25,py-25)
     update_canvas()
     frame = (frame + 1) % 8
