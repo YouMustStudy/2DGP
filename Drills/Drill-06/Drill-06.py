@@ -3,7 +3,11 @@ from pico2d import *
 KPU_WIDTH, KPU_HEIGHT = 1280, 1024
 
 def GetDxDy(a, b)
-    pass
+    global x,y
+    global dx,dy
+    global count
+    dx,dy=(a-x)/5,(b-y)/5
+    count=5
 
 def handle_events():
     global running
