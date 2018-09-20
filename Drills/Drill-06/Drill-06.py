@@ -19,9 +19,12 @@ def Move_Character():
     global x,y
     global dx,dy
     global count
+    global direction
     if(count>0):
         x+=dx
         y+=dy
+    if(count==0):
+        direction += 2
     count-=1
 
 def handle_events():
@@ -47,7 +50,7 @@ running = True
 px, py = 0, 0
 x,y=KPU_WIDTH // 2, KPU_HEIGHT // 2
 dx,dy=0, 0
-count=5
+count=0
 direction = 0
 frame = 0
 hide_cursor()
