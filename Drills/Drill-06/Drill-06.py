@@ -24,7 +24,7 @@ def Move_Character():
         x+=dx
         y+=dy
     if(count==0):
-        direction += 2
+        direction+=2
     count-=1
 
 def handle_events():
