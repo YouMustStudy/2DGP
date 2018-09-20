@@ -7,12 +7,13 @@ def GetDxDy(a,b):
     global dx,dy
     global count
     global direction
-    dx,dy=(a-x)/5,(b-y)/5
+    smooth = 30
+    dx,dy=(a-x)/smooth,(b-y)/smooth
     if(dx>0):
         direction = 1
     else:
         direction = 0
-    count=5
+    count=smooth
 
 def Move_Character():
     global x,y
@@ -59,7 +60,7 @@ while running:
     update_canvas()
     frame = (frame + 1) % 8
     Move_Character()
-    delay(0.02)
+    delay(0.01)
     handle_events()
 
 close_canvas()
