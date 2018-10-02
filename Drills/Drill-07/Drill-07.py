@@ -42,7 +42,7 @@ while True:
         kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
         character.clip_draw(frame * 100, AllLine[Vertex_Index][Line_Index][2]*100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
         update_canvas()
-        delay(0.02)
+        delay(0.01)
         frame = (frame + 1) % 8
         Line_Index = (Line_Index + 1) % LINE_VERTEX
     Line_Index=0
