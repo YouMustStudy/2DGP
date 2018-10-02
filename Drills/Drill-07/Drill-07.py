@@ -1,22 +1,21 @@
 from pico2d import *
 import random
 
-def GetLine(p1, p2, line_num):
-    dx = 100//line_num
+def GetLine(p1, p2):
     line=[]
     if(p1[0] > p2[0]):
         direction = 0
     else:
         direction = 1
-    for i in range(0, 100+1, dx):
+    for i in range(0, 100+1, 2):
         t=i/100
         line.append(((1-t)*p1[0] + t*p2[0], (1-t)*p1[1] + t*p2[1], direction))
     return line
 
-def GetAllLine(Vlist, vertex_num, line_num):
+def GetAllLine(Vlist, vertex_num):
     AllLine=[]
     for i in range (vertex_num):
-        AllLine.append(GetLine(Vlist[i], Vlist[(i+1)%vertex_num], line_num))
+        AllLine.append(GetLine(Vlist[i], Vlist[(i+1)%vertex_num]))
     return AllLine
 
 def MakeRandomPosition(width, height, size):
@@ -29,16 +28,16 @@ open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
 character = load_image('animation_sheet.png')
 
-MAX_VERTEX=10
-LINE_VERTEX=20
+MAX_VERTEX=20
+LINE_VERTEX=50
 frame=0
 Vertex_Index=0
 Line_Index=0
 
 points=MakeRandomPosition(KPU_WIDTH, KPU_HEIGHT, MAX_VERTEX)
-AllLine=GetAllLine(points, MAX_VERTEX, LINE_VERTEX)
+AllLine=GetAllLine(points, MAX_VERTEX)
 while True:
-    for i in range(LINE_VERTEX-1):
+    for i in range(LINE_VERTEX):
         clear_canvas()
         kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
         character.clip_draw(frame * 100, AllLine[Vertex_Index][Line_Index][2]*100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
