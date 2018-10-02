@@ -4,9 +4,13 @@ import random
 def GetLine(p1, p2, line_num):
     dx = 100//line_num
     line=[]
+    if(p1[0] > p2[0]):
+        direction = 0
+    else:
+        direction = 1
     for i in range(0, 100+1, dx):
         t=i/100
-        line.append(((1-t)*p1[0] + t*p2[0], (1-t)*p1[1] + t*p2[1]))
+        line.append(((1-t)*p1[0] + t*p2[0], (1-t)*p1[1] + t*p2[1], direction))
     return line
 
 def GetAllLine(Vlist, vertex_num, line_num):
@@ -37,7 +41,7 @@ while True:
     for i in range(LINE_VERTEX-1):
         clear_canvas()
         kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-        character.clip_draw(frame * 100, 100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
+        character.clip_draw(frame * 100, AllLine[Vertex_Index][Line_Index][2]*100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
         update_canvas()
         delay(0.02)
         frame = (frame + 1) % 8
