@@ -1,11 +1,11 @@
 from pico2d import *
 import random
 
-def GetLine(p1, p2):
+def GetLine(p1, p2, p3, p4):
     line=[]
     for i in range(0, 100+1, 2):
         t=i/100
-        line.append(((1-t)*p1[0] + t*p2[0], (1-t)*p1[1] + t*p2[1]))
+        line.append((((-t**3 + 2*t**2 - t)*p1[0] + (3*t**3 - 5*t**2 + 2)*p2[0] + (-3*t**3 + 4*t**2 + t)*p3[0] + (t**3 - t**2)*p4[0])/2, ((-t**3 + 2*t**2 - t)*p1[1] + (3*t**3 - 5*t**2 + 2)*p2[1] + (-3*t**3 + 4*t**2 + t)*p3[1] + (t**3 - t**2)*p4[1])/2)
     return line
 
 def GetAllLine(Vlist, vertex_num):
