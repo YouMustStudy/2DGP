@@ -26,7 +26,7 @@ character = load_image('animation_sheet.png')
 
 MAX_VERTEX=10
 LINE_VERTEX=50
-frame=0
+frame=1
 Vertex_Index=0
 Line_Index=0
 count=0
