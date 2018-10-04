@@ -3,13 +3,9 @@ import random
 
 def GetLine(p1, p2):
     line=[]
-    if(p1[0] > p2[0]):
-        direction = 0
-    else:
-        direction = 1
     for i in range(0, 100+1, 2):
         t=i/100
-        line.append(((1-t)*p1[0] + t*p2[0], (1-t)*p1[1] + t*p2[1], direction))
+        line.append(((1-t)*p1[0] + t*p2[0], (1-t)*p1[1] + t*p2[1]))
     return line
 
 def GetAllLine(Vlist, vertex_num):
@@ -28,7 +24,7 @@ open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
 character = load_image('animation_sheet.png')
 
-MAX_VERTEX=20
+MAX_VERTEX=10
 LINE_VERTEX=50
 frame=0
 Vertex_Index=0
@@ -40,10 +36,10 @@ while True:
     for i in range(LINE_VERTEX):
         clear_canvas()
         kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-        character.clip_draw(frame * 100, AllLine[Vertex_Index][Line_Index][2]*100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
+        character.clip_draw(frame * 100, 100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
         update_canvas()
         delay(0.02)
         frame = (frame + 1) % 8
-        Line_Index = (Line_Index + 1) % LINE_VERTEX
+        Line_Index = (Line_Index + 1)
     Line_Index=0
     Vertex_Index = (Vertex_Index + 1) % MAX_VERTEX
