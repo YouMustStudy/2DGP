@@ -34,9 +34,13 @@ points=MakeRandomPosition(KPU_WIDTH, KPU_HEIGHT, MAX_VERTEX)
 AllLine=GetAllLine(points, MAX_VERTEX)
 while True:
     for i in range(LINE_VERTEX):
+        if(AllLine[Vertex_Index][Line_Index][0] < AllLine[Vertex_Index][Line_Index+1][0]):
+            direction=0
+        else:
+            direction=1
         clear_canvas()
         kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-        character.clip_draw(frame * 100, 100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
+        character.clip_draw(frame * 100, direction*100, 100, 100, AllLine[Vertex_Index][Line_Index][0],AllLine[Vertex_Index][Line_Index][1])
         update_canvas()
         delay(0.02)
         frame = (frame + 1) % 8
