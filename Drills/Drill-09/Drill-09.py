@@ -34,6 +34,11 @@ class Boy:
     def draw(self):
         self.image.clip_draw(self.frame*100, self.direction*100, 100, 100, self.x, self.y)
 
+class Small_Ball:
+    pass
+class Big_Ball:
+    pass
+
 def handle_events():
     global running
     events = get_events()
