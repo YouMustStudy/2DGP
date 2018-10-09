@@ -1,9 +1,6 @@
 from pico2d import *
 import random
 
-WIDTH=800
-HEIGHT=600
-
 # Game object class here
 class Grass:
     def __init__(self):
@@ -35,7 +32,18 @@ class Boy:
         self.image.clip_draw(self.frame*100, self.direction*100, 100, 100, self.x, self.y)
 
 class Small_Ball:
-    pass
+    def __init__(self):
+        self.image=load_image('ball21x21.png')
+        self.x, self.y = random.randint(0, 800), 600
+        self.spd = random.randint(8-5, 8+5)
+    def draw(self):
+        self.image.draw(self.x, self.y)
+    def update(self):
+        self.y-=self.spd
+        if(self.y < 62 + 10):
+            self.spd=0
+            self.y=62+10
+            
 class Big_Ball:
     pass
 
@@ -49,9 +57,16 @@ def handle_events():
             running = False
 
 # initialization code
+WIDTH=800
+HEIGHT=600
+MAX_BALL_NUM = 10
+SMALL_BALL_NUM=random.randint(0, MAX_BALL_NUM-1)
+
 open_canvas()
-team=[Boy() for i in range(11)]
 grass = Grass()
+team=[Boy() for i in range(11)]
+S_Balls=[Small_Ball() for i in range(5)]
+
 running = True
 
 # game main loop code
@@ -59,10 +74,14 @@ while running:
     handle_events()
     for boy in team:
         boy.update()
+    for ball in S_Balls:
+        ball.update()
     clear_canvas()
     grass.draw()
     for boy in team:
         boy.draw()
+    for ball in S_Balls:
+        ball.draw()
     update_canvas()
     delay(0.05)
 # finalization code
