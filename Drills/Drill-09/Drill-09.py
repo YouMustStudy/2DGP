@@ -40,9 +40,9 @@ class Small_Ball:
         self.image.draw(self.x, self.y)
     def update(self):
         self.y-=self.spd
-        if(self.y < 62 + 10):
+        if(self.y < 62 + 8):
             self.spd=0
-            self.y=62+10
+            self.y=62+8
             
 class Big_Ball:
     pass
@@ -60,12 +60,12 @@ def handle_events():
 WIDTH=800
 HEIGHT=600
 MAX_BALL_NUM = 10
-SMALL_BALL_NUM=random.randint(0, MAX_BALL_NUM-1)
+SMALL_BALL_NUM=random.randint(1, MAX_BALL_NUM-1)
 
 open_canvas()
 grass = Grass()
 team=[Boy() for i in range(11)]
-S_Balls=[Small_Ball() for i in range(5)]
+S_Balls=[Small_Ball() for i in range(SMALL_BALL_NUM)]
 
 running = True
 
