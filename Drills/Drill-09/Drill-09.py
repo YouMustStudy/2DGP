@@ -35,17 +35,27 @@ class Small_Ball:
     def __init__(self):
         self.image=load_image('ball21x21.png')
         self.x, self.y = random.randint(0, 800), 600
-        self.spd = random.randint(8-5, 8+5)
+        self.spd = random.randint(10-5, 10+5)
     def draw(self):
         self.image.draw(self.x, self.y)
     def update(self):
         self.y-=self.spd
-        if(self.y < 62 + 8):
+        if(self.y < 60 + 6):
             self.spd=0
-            self.y=62+8
+            self.y=60+6
             
 class Big_Ball:
-    pass
+    def __init__(self):
+        self.image=load_image('ball41x41.png')
+        self.x, self.y = random.randint(0, 800), 599
+        self.spd = random.randint(10-5, 10+5)
+    def draw(self):
+        self.image.draw(self.x, self.y)
+    def update(self):
+        self.y-=self.spd
+        if(self.y < 60 + 18):
+            self.spd=0
+            self.y=60+18
 
 def handle_events():
     global running
@@ -59,14 +69,16 @@ def handle_events():
 # initialization code
 WIDTH=800
 HEIGHT=600
-MAX_BALL_NUM = 10
-SMALL_BALL_NUM=random.randint(1, MAX_BALL_NUM-1)
+
+MAX_BALL_NUM = 20
+SMALL_BALL_NUM=random.randint(5, MAX_BALL_NUM-1)
+BIG_BALL_NUM=MAX_BALL_NUM-SMALL_BALL_NUM
 
 open_canvas()
 grass = Grass()
 team=[Boy() for i in range(11)]
 S_Balls=[Small_Ball() for i in range(SMALL_BALL_NUM)]
-
+B_Balls=[Big_Ball() for i in range(BIG_BALL_NUM)]
 running = True
 
 # game main loop code
@@ -76,11 +88,15 @@ while running:
         boy.update()
     for ball in S_Balls:
         ball.update()
+    for ball in B_Balls:
+        ball.update()
     clear_canvas()
     grass.draw()
     for boy in team:
         boy.draw()
     for ball in S_Balls:
+        ball.draw()
+    for ball in B_Balls:
         ball.draw()
     update_canvas()
     delay(0.05)
