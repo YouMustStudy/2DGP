@@ -33,8 +33,8 @@ def draw():
     global image, visible
     clear_canvas()
     #game_framework.stack[-2].draw()
-    #if(visible):
-    image.draw(400, 300, 100, 100)
+    if(visible):
+        image.draw(400, 300, 100, 100)
     update_canvas()
 
 def update():
