@@ -34,7 +34,7 @@ def draw():
     clear_canvas()
     game_framework.stack[-2].draw()
     if(visible):
-        image.draw(400, 300, 100, 100)
+        image.draw(400, 300, 150, 150)
     update_canvas()
 
 def update():
