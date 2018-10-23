@@ -5,17 +5,18 @@ from pico2d import *
 class Grass:
     def __init__(self):
         self.image = load_image('grass.png')
-
     def draw(self):
         self.image.draw(400, 30)
 
 
 class Boy:
+    image = None
 
     def __init__(self):
         self.x, self.y = random.randint(100, 700), 90
         self.frame = random.randint(0, 7)
-        self.image = load_image('run_animation.png')
+        if(Boy.image == None):
+            Boy.image = load_image('run_animation.png')
 
 
     def update(self):
