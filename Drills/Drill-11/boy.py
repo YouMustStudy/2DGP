@@ -107,7 +107,7 @@ class SleepState:
 class DashState:
     @staticmethod
     def enter(boy, event):
-        boy.timer = 100
+        boy.timer = 50
     @staticmethod
     def exit(boy, event):
         if event == SPACE:
