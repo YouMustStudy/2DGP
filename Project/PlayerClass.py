@@ -13,7 +13,7 @@ class Player:
             self.image = load_image('.\\character\\pig.png')
         elif shape == 's':
             self.image = load_image('.\\character\\skeleton.png')
-        self.status = IdleState
+        self.status = RunState
         self.frame = 0
 
     def draw(self):
@@ -34,6 +34,8 @@ class Player:
         self.x+=WINDOW_WIDTH/2
         self.y+=WINDOW_HEIGHT/2
 
+#state
+
 class IdleState:
     @staticmethod
     def enter(player):
@@ -47,7 +49,6 @@ class IdleState:
     @staticmethod
     def draw(player):
         player.image.clip_draw(player.frame * 20, 0, 20, 20, player.x, player.y)
-
 class RunState:
     @staticmethod
     def enter(player):
