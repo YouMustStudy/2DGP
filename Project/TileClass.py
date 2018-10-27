@@ -1,8 +1,6 @@
 from pico2d import*
+import main_state
 import math
-
-WINDOW_WIDTH=800
-WINDOW_HEIGHT=800
 
 
 class Bigtile:
@@ -10,32 +8,40 @@ class Bigtile:
 
     def __init__(self, x, y):
         self.x, self.y = x, y
-        self.sx, self.sy = x, y
-        self.radian=0
+        self.sx, self.sy = x-main_state.WINDOW_WIDTH/2, y-main_state.WINDOW_HEIGHT/2
+        self.theta=0
         if Bigtile.image == None:
             Bigtile.image=load_image('Bigtile.png')
             
     def draw(self):
-        self.image.rotate_draw(self.radian, self.x, self.y)
+        self.image.rotate_draw(math.radians(self.theta), self.x, self.y)
 
     def update(self):
         pass
 
     def rotate(self, theta):
-        global WINDOW_WIDTH, WINDOW_HEIGHT
-        theta=math.radians(theta)
-        self.radian += theta
-        self.x-=WINDOW_WIDTH/2
-        self.y-=WINDOW_HEIGHT/2
+        radian=math.radians(theta)
+        self.theta += theta
+        if self.theta < 0:
+            self.theta = 360+self.theta
+        self.x-=main_state.WINDOW_WIDTH/2
+        self.y-=main_state.WINDOW_HEIGHT/2
         tmp_x, tmp_y = self.x, self.y
-        self.x=tmp_x*math.cos(theta) - tmp_y*math.sin(theta)
-        self.y=tmp_x*math.sin(theta) + tmp_y*math.cos(theta)
-        self.x+=WINDOW_WIDTH/2
-        self.y+=WINDOW_HEIGHT/2
+        self.x=tmp_x*math.cos(radian) - tmp_y*math.sin(radian)
+        self.y=tmp_x*math.sin(radian) + tmp_y*math.cos(radian)
+        self.x+=main_state.WINDOW_WIDTH/2
+        self.y+=main_state.WINDOW_HEIGHT/2
 
     def fix_position(self):
-        side = self.radian//90
-        self.x, self.y = self.sx*math.cos(side * 90) - self.sy*math.sin(side * 90), self.sx*math.sin(side * 90) + self.sy*math.cos(side * 90)
+        radian = math.radians(self.theta)
+        self.x=self.sx*math.cos(radian) - self.sy*math.sin(radian)
+        self.y=self.sx*math.sin(radian) + self.sy*math.cos(radian)
+        self.x+=main_state.WINDOW_WIDTH/2
+        self.y+=main_state.WINDOW_HEIGHT/2
+
+    def fix_start(self):
+        self.sx=self.x
+        self.sy=self.y
 
 
 class Smalltile:
@@ -43,33 +49,40 @@ class Smalltile:
 
     def __init__(self, x, y):
         self.x, self.y = x, y
-        self.sx, self.sy = x, y
-        self.radian=0
+        self.sx, self.sy = x-main_state.WINDOW_WIDTH/2, y-main_state.WINDOW_HEIGHT/2
+        self.theta=0
         if Smalltile.image == None:
             Smalltile.image=load_image('Tile.png')
             
     def draw(self):
-        self.image.rotate_draw(self.radian, self.x, self.y)
+        self.image.rotate_draw(math.radians(self.theta), self.x, self.y)
 
     def update(self):
         pass
 
     def rotate(self, theta):
-        global WINDOW_WIDTH, WINDOW_HEIGHT
-        theta=math.radians(theta)
-        self.radian +=theta
-        self.x-=WINDOW_WIDTH/2
-        self.y-=WINDOW_HEIGHT/2
+        radian=math.radians(theta)
+        self.theta += theta
+        if self.theta < 0:
+            self.theta = 360+self.theta
+        self.x-=main_state.WINDOW_WIDTH/2
+        self.y-=main_state.WINDOW_HEIGHT/2
         tmp_x, tmp_y = self.x, self.y
-        self.x=tmp_x*math.cos(theta) - tmp_y*math.sin(theta)
-        self.y=tmp_x*math.sin(theta) + tmp_y*math.cos(theta)
-        self.x+=WINDOW_WIDTH/2
-        self.y+=WINDOW_HEIGHT/2
-        
-    def fix_position(self):
-        side = self.radian//90
-        self.x, self.y = self.sx*math.cos(side * 90) - self.sy*math.sin(side * 90), self.sx*math.sin(side * 90) + self.sy*math.cos(side * 90)
+        self.x=tmp_x*math.cos(radian) - tmp_y*math.sin(radian)
+        self.y=tmp_x*math.sin(radian) + tmp_y*math.cos(radian)
+        self.x+=main_state.WINDOW_WIDTH/2
+        self.y+=main_state.WINDOW_HEIGHT/2
 
+    def fix_position(self):
+        radian = math.radians(self.theta)
+        self.x=self.sx*math.cos(radian) - self.sy*math.sin(radian)
+        self.y=self.sx*math.sin(radian) + self.sy*math.cos(radian)
+        self.x+=main_state.WINDOW_WIDTH/2
+        self.y+=main_state.WINDOW_HEIGHT/2
+
+    def fix_start(self):
+        self.sx=self.x
+        self.sy=self.y
 
 def load_position(x, y):
     pos=[]
@@ -88,14 +101,14 @@ def load_position(x, y):
 
 
 def init_tile():
-    pos=load_position(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
-    pos+=load_position(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+    pos=load_position(main_state.WINDOW_WIDTH/2, main_state.WINDOW_HEIGHT/2)
+    pos+=load_position(main_state.WINDOW_WIDTH/2, main_state.WINDOW_HEIGHT/2)
     for i in range(7):
         pos[-(i+1)].rotate(90)
-    pos+=load_position(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+    pos+=load_position(main_state.WINDOW_WIDTH/2, main_state.WINDOW_HEIGHT/2)
     for i in range(7):
         pos[-(i+1)].rotate(180)
-    pos+=load_position(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+    pos+=load_position(main_state.WINDOW_WIDTH/2, main_state.WINDOW_HEIGHT/2)
     for i in range(7):
         pos[-(i+1)].rotate(270)
     return pos

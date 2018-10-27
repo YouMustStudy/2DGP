@@ -1,5 +1,5 @@
 from pico2d import*
-
+import main_state
 
 class Player:
     def __init__(self, x, y, shape):
@@ -15,6 +15,7 @@ class Player:
             self.image = load_image('.\\character\\skeleton.png')
         self.status = RunState
         self.frame = 0
+        self.move = 0
 
     def draw(self):
         self.status.draw(self)
@@ -23,18 +24,19 @@ class Player:
         self.status.do(self)
 
     def rotate(self, theta):
-        global WINDOW_WIDTH, WINDOW_HEIGHT
         theta=math.radians(theta)
-        self.radian += theta
-        self.x-=WINDOW_WIDTH/2
-        self.y-=WINDOW_HEIGHT/2
+        self.x-=main_state.WINDOW_WIDTH/2
+        self.y-=main_state.WINDOW_HEIGHT/2
         tmp_x, tmp_y = self.x, self.y
         self.x=tmp_x*math.cos(theta) - tmp_y*math.sin(theta)
         self.y=tmp_x*math.sin(theta) + tmp_y*math.cos(theta)
-        self.x+=WINDOW_WIDTH/2
-        self.y+=WINDOW_HEIGHT/2
+        self.x+=main_state.WINDOW_WIDTH/2
+        self.y+=main_state.WINDOW_HEIGHT/2
 
-#state
+    def change_state(self, state):
+        self.status.exit(self)
+        self.status = state
+        self.status.enter(self)
 
 class IdleState:
     @staticmethod
@@ -45,7 +47,8 @@ class IdleState:
         pass
     @staticmethod
     def do(player):
-        pass
+        if player.move > 0:
+            player.change_state(RunState)
     @staticmethod
     def draw(player):
         player.image.clip_draw(player.frame * 20, 0, 20, 20, player.x, player.y)
@@ -58,10 +61,38 @@ class RunState:
         pass
     @staticmethod
     def do(player):
-        global MAP
         player.frame = (player.frame+1) % 2
         player.x += 1
-        player.x = clamp(MAP[player.index].x, player.x, MAP[player.index+1].x)
+        player.x = clamp(main_state.MAP[player.index].x, player.x, main_state.MAP[player.index+1].x)
+        if player.x == main_state.MAP[player.index+1].x:
+            player.index += 1
+            player.move -= 1
+            if main_state.MAP[player.index].theta > 0:
+                player.change_state(SpinState)
+            elif player.move == 0:
+                player.change_state(IdleState)
+
+
     @staticmethod
     def draw(player):
-        player.shape.clip_draw(player.frame * 20 + 20, 0, 20, 20, player.x, player.y)
+        player.image.clip_draw(player.frame * 20 + 20, 0, 20, 20, player.x, player.y)
+class SpinState:
+    @staticmethod
+    def enter(player):
+        player.frame = 0
+    @staticmethod
+    def exit(player):
+        pass
+    @staticmethod
+    def do(player):
+        player.frame = (player.frame+1) % 2
+        if main_state.MAP[player.index].theta > 0:
+            player.rotate(-1)
+            main_state.rotate_map(-1)
+        else:
+            main_state.fix_map()
+            player.change_state(IdleState)
+
+    @staticmethod
+    def draw(player):
+        player.image.clip_draw(player.frame * 20 + 20, 0, 20, 20, player.x, player.y)
