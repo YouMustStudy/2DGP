@@ -13,7 +13,7 @@ class Player:
             self.image = load_image('.\\character\\pig.png')
         elif shape == 's':
             self.image = load_image('.\\character\\skeleton.png')
-        self.status = RunState
+        self.status = IdleState
         self.frame = 0
         self.move = 0
 

@@ -22,13 +22,16 @@ class Dice:
         game_world.add_object(dice, 3)
 
 class DiceResult:
-    FONT = None
+    image = None
     def __init__(self):
-        self.x, self.y = 400, 400
+        self.x, self.y = 400, 500
         self.number = random.randint(1, 6)
         self.timer = 1000
-        if DiceResult.FONT == None:
-            DiceResult.FONT = load_font("C:\\Users\\asaen\\Desktop\\2DGP\\Project\\font\\InterparkGothicBold.ttf", 20)
+        if DiceResult.image == None:
+            DiceResult.image = []
+            for i in range(6):
+                path = '.\\icons\\' + str(i+1) + '.png'
+                DiceResult.image.append(load_image(path))
 
     def update(self):
         self.timer -= 1
@@ -37,4 +40,4 @@ class DiceResult:
             game_world.remove_object(self)
 
     def draw(self):
-        self.FONT.draw(self.x, self.y, str(self.number))
+        self.image[self.number-1].draw(self.x, self.y)
