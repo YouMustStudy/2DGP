@@ -241,7 +241,10 @@ class Ghost:
 
 
     def draw(self):
-        self.image.clip_composite_draw(int(self.frame) * 100, 300, 100, 100, 3.141592 / 2 * self.theta, '', self.x - 25, self.y, self.width, self.height)
+        if(self.boy.velocity == 1):
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 100, 100, 3.141592 / 2 * self.theta, '', self.x - 25, self.y, self.width, self.height)
+        else:
+            self.image.clip_composite_draw(int(self.frame) * 100, 200, 100, 100, -3.141592/2 * self.theta, '', self.x+25, self.y, self.width, self.height)
 
 #Ball Class
 
