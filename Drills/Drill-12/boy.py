@@ -161,6 +161,7 @@ class Boy:
         self.dir = 1
         self.velocity = 0
         self.frame = 0
+        self.alpha = 0
         self.timer = 0
         self.event_que = []
         self.cur_state = IdleState
