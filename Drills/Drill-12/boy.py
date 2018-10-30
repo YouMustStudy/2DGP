@@ -51,7 +51,7 @@ class IdleState:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
-        boy.timer = 1.0
+        boy.timer = 10.0
 
     @staticmethod
     def exit(boy, event):
@@ -104,13 +104,10 @@ class RunState:
 
 
 class SleepState:
-    ghost_direct = 1
     @staticmethod
     def enter(boy, event):
-        boy.frame = 0
-        boy.theta = 1
-        boy.gx, boy.gy = boy.x, boy.y
-        boy.ghost_radian = math.radians(-90)
+        ghost = Ghost(boy)
+        game_world.add_object(ghost, 1)
 
     @staticmethod
     def exit(boy, event):
@@ -119,34 +116,18 @@ class SleepState:
     @staticmethod
     def do(boy):
         boy.frame=(boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        boy.alpha = random.randint(1, 6) / 10.0
-
-        boy.gx += RUN_SPEED_PPS * game_framework.frame_time * SleepState.ghost_direct
-        boy.gx = clamp(boy.x - 20, boy.gx, boy.x + 20)
-        if boy.gx == boy.x-20 or boy.gx == boy.x+20:
-            SleepState.ghost_direct *= -1
-        boy.gy += RUN_SPEED_PPS * game_framework.frame_time
-        boy.gy = clamp(boy.y, boy.gy, boy.y + RUN_SPEED_PPS)
-
-
-        boy.theta -= game_framework.frame_time
-        boy.theta = clamp(0, boy.theta, 1)
-        if boy.theta == 0:
-            boy.gx = boy.x + RADIUS_PIXEL * math.cos(boy.ghost_radian)
-            boy.gy = boy.y + RUN_SPEED_PPS + RADIUS_PIXEL + RADIUS_PIXEL * math.sin(boy.ghost_radian)
-            boy.ghost_radian += THETA_PER_SEC * game_framework.frame_time
 
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2, '', boy.x-25, boy.y-25, 100, 100)
-            boy.image.opacify(boy.alpha)
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2 * boy.theta, '', boy.gx-25, boy.gy, 100, 100)
-            boy.image.opacify(1)
+            #boy.image.opacify(boy.alpha)
+            #boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2 * boy.theta, '', boy.gx-25, boy.gy, 100, 100)
+            #boy.image.opacify(1)
         else:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2, '', boy.x+25, boy.y-25, 100, 100)
-            boy.image.opacify(boy.alpha)
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2 * boy.theta, '', boy.gx+25, boy.gy, 100, 100)
-            boy.image.opacify(1)
+            #boy.image.opacify(boy.alpha)
+            #boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2 * boy.theta, '', boy.gx+25, boy.gy, 100, 100)
+            #boy.image.opacify(1)
 
 
 class DashState:
@@ -189,9 +170,6 @@ class Boy:
         self.dir = 1
         self.velocity = 0
         self.frame = 0
-        self.alpha = 0.5
-        self.theta = 1
-        self.ghost_radian = 0
         self.timer = 0
         self.event_que = []
         self.cur_state = IdleState
@@ -222,12 +200,49 @@ class Boy:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 class Ghost:
-    def __init__(self, x, y):
-        self.x, self.y =  x, y
+    def __init__(self, boy):
+        self.boy = boy
+        self.image = load_image('animation_sheet.png')
+        self.x, self.y = boy.x, boy.y
+        self.sx, self.sy = boy.x, boy.y
+        self.width, self.height = 0, 0
         self.frame = 0
         self.alpha = 0.5
         self.theta = 1
         self.radian = math.radians(-90)
+        self.dir = 1
+
+
+    def update(self):
+        if self.boy.cur_state != SleepState:
+            game_world.remove_object(self)
+
+        self.frame=(self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        self.alpha = random.randint(1, 6) / 10.0
+        self.image.opacify(self.alpha)
+        self.x += RUN_SPEED_PPS * game_framework.frame_time * self.dir * 4
+        self.x = clamp(self.sx - RUN_SPEED_PPS /4 , self.x, self.sx + RUN_SPEED_PPS /4 )
+        if self.x == self.sx-RUN_SPEED_PPS /4  or self.x == self.sx+RUN_SPEED_PPS /4 :
+            self.dir *= -1
+        self.y += RUN_SPEED_PPS * game_framework.frame_time
+        self.y = clamp(self.sy, self.y, self.y + RUN_SPEED_PPS)
+
+        self.width += 200 * game_framework.frame_time
+        self.width = clamp(0, self.width, 100)
+        self.height += 200 * game_framework.frame_time
+        self.height = clamp(0, self.height, 100)
+
+        self.theta -= game_framework.frame_time
+        self.theta = clamp(0, self.theta, 1)
+        if self.theta == 0:
+            self.x = self.sx + RADIUS_PIXEL * math.cos(self.radian)
+            self.y = self.sy + RUN_SPEED_PPS + RADIUS_PIXEL + RADIUS_PIXEL * math.sin(self.radian)
+            self.radian += THETA_PER_SEC * game_framework.frame_time
+
+
+    def draw(self):
+        self.image.clip_composite_draw(int(self.frame) * 100, 300, 100, 100, 3.141592 / 2 * self.theta, '', self.x - 25, self.y, self.width, self.height)
+
 #Ball Class
 
 class Ball:
