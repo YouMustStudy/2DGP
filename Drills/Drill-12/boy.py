@@ -104,6 +104,7 @@ class RunState:
 
 
 class SleepState:
+    ghost_direct = 1
     @staticmethod
     def enter(boy, event):
         boy.frame = 0
@@ -119,8 +120,15 @@ class SleepState:
     def do(boy):
         boy.frame=(boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         boy.alpha = random.randint(1, 6) / 10.0
+
+        boy.gx += RUN_SPEED_PPS * game_framework.frame_time * SleepState.ghost_direct
+        boy.gx = clamp(boy.x - 20, boy.gx, boy.x + 20)
+        if boy.gx == boy.x-20 or boy.gx == boy.x+20:
+            SleepState.ghost_direct *= -1
         boy.gy += RUN_SPEED_PPS * game_framework.frame_time
         boy.gy = clamp(boy.y, boy.gy, boy.y + RUN_SPEED_PPS)
+
+
         boy.theta -= game_framework.frame_time
         boy.theta = clamp(0, boy.theta, 1)
         if boy.theta == 0:
@@ -136,6 +144,9 @@ class SleepState:
             boy.image.opacify(1)
         else:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2, '', boy.x+25, boy.y-25, 100, 100)
+            boy.image.opacify(boy.alpha)
+            boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2 * boy.theta, '', boy.gx+25, boy.gy, 100, 100)
+            boy.image.opacify(1)
 
 
 class DashState:
