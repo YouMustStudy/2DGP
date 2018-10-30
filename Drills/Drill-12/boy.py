@@ -3,6 +3,7 @@ from ball import Ball
 
 import game_world
 import game_framework
+import random
 
 # Boy Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -50,7 +51,7 @@ class IdleState:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
-        boy.timer = 10.0
+        boy.timer = 1.0
 
     @staticmethod
     def exit(boy, event):
@@ -114,10 +115,14 @@ class SleepState:
     @staticmethod
     def do(boy):
         boy.frame=(boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        boy.alpha = random.randint(1, 6) / 10.0
 
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2, '', boy.x-25, boy.y-25, 100, 100)
+            boy.image.opacify(boy.alpha)
+            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2, '', boy.x, boy.y, 100, 100)
+            boy.image.opacify(1)
         else:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2, '', boy.x+25, boy.y-25, 100, 100)
 
@@ -156,12 +161,14 @@ next_state_table = {
 class Boy:
     def __init__(self):
         self.x, self.y = 1600 // 2, 90
+        self.gx, self.gy = self.x, self.y
         self.image = load_image('animation_sheet.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.velocity = 0
         self.frame = 0
-        self.alpha = 0
+        self.alpha = 0.5
+        self.theta = 1
         self.timer = 0
         self.event_que = []
         self.cur_state = IdleState
