@@ -221,7 +221,13 @@ class Boy:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
-
+class Ghost:
+    def __init__(self, x, y):
+        self.x, self.y =  x, y
+        self.frame = 0
+        self.alpha = 0.5
+        self.theta = 1
+        self.radian = math.radians(-90)
 #Ball Class
 
 class Ball:
