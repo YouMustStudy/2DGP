@@ -21,7 +21,7 @@ FRAMES_PER_ACTION = 8.0
 RADIUS_METER = 3.0
 RADIUS_PIXEL = RADIUS_METER * PIXEL_PER_METER
 ROUND_PER_SEC = 2.0
-THETA_PER_SEC = ROUND_PER_SEC * 360
+THETA_PER_SEC = math.radians(ROUND_PER_SEC * 360)
 
 # Boy Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, SPACE, LSHIFT_DOWN, RSHIFT_DOWN, LSHIFT_UP, RSHIFT_UP, TIRED_TIMER = range(11)
@@ -107,6 +107,9 @@ class SleepState:
     @staticmethod
     def enter(boy, event):
         boy.frame = 0
+        boy.theta = 1
+        boy.gx, boy.gy = boy.x, boy.y
+        boy.ghost_radian = math.radians(-90)
 
     @staticmethod
     def exit(boy, event):
@@ -116,12 +119,20 @@ class SleepState:
     def do(boy):
         boy.frame=(boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         boy.alpha = random.randint(1, 6) / 10.0
+        boy.gy += RUN_SPEED_PPS * game_framework.frame_time
+        boy.gy = clamp(boy.y, boy.gy, boy.y + RUN_SPEED_PPS)
+        boy.theta -= game_framework.frame_time
+        boy.theta = clamp(0, boy.theta, 1)
+        if boy.theta == 0:
+            boy.gx = boy.x + RADIUS_PIXEL * math.cos(boy.ghost_radian)
+            boy.gy = boy.y + RUN_SPEED_PPS + RADIUS_PIXEL + RADIUS_PIXEL * math.sin(boy.ghost_radian)
+            boy.ghost_radian += THETA_PER_SEC * game_framework.frame_time
 
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2, '', boy.x-25, boy.y-25, 100, 100)
             boy.image.opacify(boy.alpha)
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2, '', boy.x, boy.y, 100, 100)
+            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592/2 * boy.theta, '', boy.gx-25, boy.gy, 100, 100)
             boy.image.opacify(1)
         else:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592/2, '', boy.x+25, boy.y-25, 100, 100)
@@ -169,6 +180,7 @@ class Boy:
         self.frame = 0
         self.alpha = 0.5
         self.theta = 1
+        self.ghost_radian = 0
         self.timer = 0
         self.event_que = []
         self.cur_state = IdleState
