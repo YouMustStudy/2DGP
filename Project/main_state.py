@@ -19,9 +19,11 @@ PLAYER_TURN = None
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 800
 
+test = None
 
 def enter():
-    global MAP, PLAYER, PLAYER_TURN, DICE
+    global MAP, PLAYER, PLAYER_TURN, DICE, test
+    test = load_image('Popup.png')
     PLAYER_TURN = 0
     MAP = TileClass.init_tile()
     PLAYER.append(PlayerClass.Player(MAP[0].x, MAP[0].y, 'p'))
@@ -66,6 +68,7 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
+    test.draw(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
     update_canvas()
 
 
