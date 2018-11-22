@@ -152,7 +152,7 @@ class Boy:
     def draw(self):
         self.cur_state.draw(self)
         self.font.draw(self.x-self.bg.window_left - 60, self.y-self.bg.window_bottom + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
-        self.font.draw(700, 580, 'Score : %d' % (self.eat_count), (255, 255, 0))
+        self.font.draw(self.x-self.bg.window_left - 60, self.y-self.bg.window_bottom + 80, 'Score : %d' % (self.eat_count), (255, 255, 0))
         #self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 
     def handle_event(self, event):
