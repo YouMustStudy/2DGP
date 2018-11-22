@@ -20,4 +20,3 @@ class Ball:
 
     def update(self):
         self.y -= self.fall_speed * game_framework.frame_time
-
