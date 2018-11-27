@@ -4,11 +4,15 @@ import json
 import game_framework
 import world_build_state
 
+width = height = 0
 live_time = 0
 rank = None
 font = None
 
 def enter():
+    global rank, width, height
+    width, height = get_canvas_width(), get_canvas_height()
+    load_fonts()
     load_rank()
     rank.append(live_time)
     rank.sort()
@@ -16,7 +20,9 @@ def enter():
     save_rank()
 
 def exit():
+    global rank, font
     del(rank)
+    del(font)
 
 def update():
     pass
@@ -30,7 +36,11 @@ def handle_events():
             game_framework.change_state(world_build_state)
 
 def draw():
-    pass
+    clear_canvas()
+    font.draw(width//2, height//2, 'Total Ranking')
+    for i in range(1, 10 + 1):
+        font.draw(width//2, height//2-20*i, '#%d. %.2f'%(i, rank[i-1]))
+    update_canvas()
 
 def pause():
     pass
