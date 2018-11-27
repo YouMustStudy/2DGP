@@ -6,6 +6,7 @@ import world_build_state
 
 live_time = 0
 rank = None
+font = None
 
 def enter():
     load_rank()
@@ -15,7 +16,7 @@ def enter():
     save_rank()
 
 def exit():
-    pass
+    del(rank)
 
 def update():
     pass
@@ -50,3 +51,8 @@ def save_rank():
     global rank
     with open('.\\rank.txt', 'w') as f:
         json.dump(rank, f)
+
+def load_fonts():
+    global font
+    if font == None:
+        font = load_font('ENCR10B.TTF')
