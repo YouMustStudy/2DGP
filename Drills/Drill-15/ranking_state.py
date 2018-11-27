@@ -8,7 +8,11 @@ live_time = 0
 rank = None
 
 def enter():
-    pass
+    load_rank()
+    rank.append(live_time)
+    rank.sort()
+    del(rank[-1])
+    save_rank()
 
 def exit():
     pass
