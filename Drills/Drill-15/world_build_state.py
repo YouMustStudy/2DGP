@@ -42,7 +42,7 @@ def get_boy():
 def create_new_world():
     global boy
     boy = Boy()
-    game_world.add_object(boy, 1)
+    game_world.add_object(boy, 0)
 
     with open('zombie_data.json', 'r') as f:
         zombie_data_list = json.load(f)

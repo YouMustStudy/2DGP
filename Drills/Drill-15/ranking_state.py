@@ -1,3 +1,5 @@
+live_time = 0
+
 def enter():
     pass
 
@@ -15,3 +17,7 @@ def pause():
 
 def resume():
     pass
+
+def set_time(time):
+    global live_time
+    live_time = time
