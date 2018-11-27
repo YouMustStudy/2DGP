@@ -15,7 +15,7 @@ def enter():
     load_fonts()
     load_rank()
     rank.append(live_time)
-    rank.sort()
+    rank.sort(reverse=True)
     del(rank[-1])
     save_rank()
 
