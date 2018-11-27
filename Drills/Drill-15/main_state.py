@@ -63,7 +63,7 @@ def update():
     for zombies in game_world.objects[1]:
         if collide(boy, zombies):
             ranking_state.set_time(get_time() - boy.start_time)
-            game_framework.push_state(ranking_state)
+            game_framework.change_state(ranking_state)
 
 
 def draw():

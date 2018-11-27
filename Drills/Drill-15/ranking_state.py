@@ -20,9 +20,8 @@ def enter():
     save_rank()
 
 def exit():
-    global rank, font
-    del(rank)
-    del(font)
+    global rank
+    rank.clear()
 
 def update():
     pass
@@ -37,9 +36,9 @@ def handle_events():
 
 def draw():
     clear_canvas()
-    font.draw(width//2, height//2, 'Total Ranking')
+    font.draw(width//2, height//2 + 50, 'Total Ranking')
     for i in range(1, 10 + 1):
-        font.draw(width//2, height//2-20*i, '#%d. %.2f'%(i, rank[i-1]))
+        font.draw(width//2, height//2-20*i + 50, '#%d. %.2f'%(i, rank[i-1]))
     update_canvas()
 
 def pause():
@@ -54,12 +53,12 @@ def set_time(time):
 
 def load_rank():
     global rank
-    with open('.\\rank.txt', 'r') as f:
+    with open('.\\rank.txt', 'rt') as f:
         rank = json.load(f)
 
 def save_rank():
     global rank
-    with open('.\\rank.txt', 'w') as f:
+    with open('.\\rank.txt', 'wt') as f:
         json.dump(rank, f)
 
 def load_fonts():
